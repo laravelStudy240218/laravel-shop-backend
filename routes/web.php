@@ -1,6 +1,10 @@
 <?php
 
+use App\Livewire\Login;
+use App\Livewire\Me;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +19,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/login', Login::class)->name('login');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/me', Me::class)->name('me');
+
+Route::post('/tokens/create', function (Request $request) {
+    $token = $request->user()->createToken($request->token_name);
+
+    return ['token' => $token->plainTextToken];
 });
